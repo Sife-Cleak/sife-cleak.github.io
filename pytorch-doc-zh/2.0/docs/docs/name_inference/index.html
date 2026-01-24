@@ -1,0 +1,7389 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://pytorch.apachecn.org/2.0/docs/docs/name_inference/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>命名tensor运算符覆盖率 ¶ - 【布客】PyTorch 中文翻译</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.5%201.75v11.5c0%20.138.112.25.25.25h3.17a.75.75%200%200%201%200%201.5H2.75A1.75%201.75%200%200%201%201%2013.25V1.75C1%20.784%201.784%200%202.75%200h8.5C12.216%200%2013%20.784%2013%201.75v7.736a.75.75%200%200%201-1.5%200V1.75a.25.25%200%200%200-.25-.25h-8.5a.25.25%200%200%200-.25.25m13.274%209.537zl-4.557%204.45a.75.75%200%200%201-1.055-.008l-1.943-1.95a.75.75%200%200%201%201.062-1.058l1.419%201.425%204.026-3.932a.75.75%200%201%201%201.048%201.074M4.75%204h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5M4%207.75A.75.75%200%200%201%204.75%207h2a.75.75%200%200%201%200%201.5h-2A.75.75%200%200%201%204%207.75%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.499.75a.75.75%200%200%201%201.5%200v.996C5.9%202.903%206.793%203.65%207.662%204.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873%2010.794-.045%2012.622.26%2014.408.558%2016%201.94%2016%204.25c0%201.278-.954%202.575-2.44%202.734l.146.508.065.22c.203.701.412%201.455.476%202.226.142%201.707-.4%203.03-1.487%203.898C11.714%2014.671%2010.27%2015%208.75%2015h-6a.75.75%200%200%201%200-1.5h1.376a4.5%204.5%200%200%201-.563-1.191%203.84%203.84%200%200%201-.05-2.063%204.65%204.65%200%200%201-2.025-.293.75.75%200%200%201%20.525-1.406c1.357.507%202.376-.006%202.698-.318l.009-.01a.747.747%200%200%201%201.06%200%20.75.75%200%200%201-.012%201.074c-.912.92-.992%201.835-.768%202.586.221.74.745%201.337%201.196%201.621H8.75c1.343%200%202.398-.296%203.074-.836.635-.507%201.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.4%202.4%200%200%201-.507-.441%203.1%203.1%200%200%201-.633-1.248.75.75%200%200%201%201.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738%200%201.25-.615%201.25-1.25%200-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706%201.345-.46.92-.27%201.774.019%203.062l.042.19.01.05c.348.443.666.949.94%201.553a.75.75%200%201%201-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7%205.527c-.814-.68-1.75-1.462-2.692-2.619a3.7%203.7%200%200%200-1.023.88c-.406.495-.663%201.036-.722%201.508.116.122.306.21.591.239.388.038.797-.06%201.032-.19a.75.75%200%200%201%20.728%201.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75%205.677V5.5c0-.984.48-1.94%201.077-2.664.46-.559%201.05-1.055%201.673-1.353z%22/%3E%3C/svg%3E');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M13.78%204.22a.75.75%200%200%201%200%201.06l-7.25%207.25a.75.75%200%200%201-1.06%200L2.22%209.28a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018L6%2010.94l6.72-6.72a.75.75%200%200%201%201.06%200%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.92%206.085h.001a.749.749%200%201%201-1.342-.67c.169-.339.436-.701.849-.977C6.845%204.16%207.369%204%208%204a2.76%202.76%200%200%201%201.637.525c.503.377.863.965.863%201.725%200%20.448-.115.83-.329%201.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6%206%200%200%200-.26.16%201%201%200%200%200-.276.245.75.75%200%200%201-1.248-.832c.184-.264.42-.489.692-.661q.154-.1.313-.195l.007-.004c.1-.061.182-.11.258-.161a1%201%200%200%200%20.277-.245C8.96%206.514%209%206.427%209%206.25a.61.61%200%200%200-.262-.525A1.27%201.27%200%200%200%208%205.5c-.369%200-.595.09-.74.187a1%201%200%200%200-.34.398M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.344%202.343za8%208%200%200%201%2011.314%2011.314A8.002%208.002%200%200%201%20.234%2010.089a8%208%200%200%201%202.11-7.746m1.06%2010.253a6.5%206.5%200%201%200%209.108-9.275%206.5%206.5%200%200%200-9.108%209.275M6.03%204.97%208%206.94l1.97-1.97a.749.749%200%200%201%201.275.326.75.75%200%200%201-.215.734L9.06%208l1.97%201.97a.749.749%200%200%201-.326%201.275.75.75%200%200%201-.734-.215L8%209.06l-1.97%201.97a.749.749%200%200%201-1.275-.326.75.75%200%200%201%20.215-.734L6.94%208%204.97%206.03a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M9.504.43a1.516%201.516%200%200%201%202.437%201.713L10.415%205.5h2.123c1.57%200%202.346%201.909%201.22%203.004l-7.34%207.142a1.25%201.25%200%200%201-.871.354h-.302a1.25%201.25%200%200%201-1.157-1.723L5.633%2010.5H3.462c-1.57%200-2.346-1.909-1.22-3.004zm1.047%201.074L3.286%208.571A.25.25%200%200%200%203.462%209H6.75a.75.75%200%200%201%20.694%201.034l-1.713%204.188%206.982-6.793A.25.25%200%200%200%2012.538%207H9.25a.75.75%200%200%201-.683-1.06l2.008-4.418.003-.006-.004-.009-.006-.006-.008-.001q-.005%200-.009.004%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.72.22a.75.75%200%200%201%201.06%200l1%20.999a3.5%203.5%200%200%201%202.441%200l.999-1a.748.748%200%200%201%201.265.332.75.75%200%200%201-.205.729l-.775.776c.616.63.995%201.493.995%202.444v.327q0%20.15-.025.292c.408.14.764.392%201.029.722l1.968-.787a.75.75%200%200%201%20.556%201.392L13%207.258V9h2.25a.75.75%200%200%201%200%201.5H13v.5q-.002.615-.141%201.186l2.17.868a.75.75%200%200%201-.557%201.392l-2.184-.873A5%205%200%200%201%208%2016a5%205%200%200%201-4.288-2.427l-2.183.873a.75.75%200%200%201-.558-1.392l2.17-.868A5%205%200%200%201%203%2011v-.5H.75a.75.75%200%200%201%200-1.5H3V7.258L.971%206.446a.75.75%200%200%201%20.558-1.392l1.967.787c.265-.33.62-.583%201.03-.722a1.7%201.7%200%200%201-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72%201.28a.75.75%200%200%201%200-1.06m.53%206.28a.75.75%200%200%200-.75.75V11a3.5%203.5%200%201%200%207%200V7.25a.75.75%200%200%200-.75-.75ZM6.173%205h3.654A.17.17%200%200%200%2010%204.827V4.5a2%202%200%201%200-4%200v.327c0%20.096.077.173.173.173%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5%205.782V2.5h-.25a.75.75%200%200%201%200-1.5h6.5a.75.75%200%200%201%200%201.5H11v3.282l3.666%205.76C15.619%2013.04%2014.543%2015%2012.767%2015H3.233c-1.776%200-2.852-1.96-1.899-3.458Zm-2.4%206.565a.75.75%200%200%200%20.633%201.153h9.534a.75.75%200%200%200%20.633-1.153L12.225%2010.5h-8.45ZM9.5%202.5h-3V6c0%20.143-.04.283-.117.403L4.73%209h6.54L9.617%206.403A.75.75%200%200%201%209.5%206Z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1.75%202.5h10.5a.75.75%200%200%201%200%201.5H1.75a.75.75%200%200%201%200-1.5m4%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5m0%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5M2.5%207.75v6a.75.75%200%200%201-1.5%200v-6a.75.75%200%200%201%201.5%200%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tensor" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="【布客】PyTorch 中文翻译" class="md-header__button md-logo" aria-label="【布客】PyTorch 中文翻译" data-md-component="logo">
+      
+  <img src="https://data.dafeiyang.cn/images/logo/logo_green.webp" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            【布客】PyTorch 中文翻译
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              命名tensor运算符覆盖率 ¶
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/apachecn/pytorch-doc-zh" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    apachecn/pytorch-doc-zh
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="【布客】PyTorch 中文翻译" class="md-nav__button md-logo" aria-label="【布客】PyTorch 中文翻译" data-md-component="logo">
+      
+  <img src="https://data.dafeiyang.cn/images/logo/logo_green.webp" alt="logo">
+
+    </a>
+    【布客】PyTorch 中文翻译
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/apachecn/pytorch-doc-zh" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    apachecn/pytorch-doc-zh
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 中文文档 & 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 新特性
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PyTorch 新特性
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.12
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.11
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../LatestChanges/PyTorch_V1.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V1.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 2.x 中文文档 & 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PyTorch 2.x 中文文档 & 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中文教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中文教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_1" id="__nav_3_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PyTorch Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/recipes/recipes_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See All Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/prototype/prototype_index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    See All Prototype Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_2" id="__nav_3_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to PyTorch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Introduction to PyTorch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn the Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/quickstart_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/tensorqs_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tensors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/data_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets & DataLoaders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/transforms_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/buildmodel_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build the Neural Network
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/autogradqs_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic Differentiation with torch.autograd
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/optimization_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimizing Model Parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/basics/saveloadrun_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Save and Load the Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_3" id="__nav_3_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to PyTorch on YouTube
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Introduction to PyTorch on YouTube
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to PyTorch - YouTube Series
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/introyt1_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/tensors_deeper_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to PyTorch Tensors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/autogradyt_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Fundamentals of Autograd
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/modelsyt_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building Models with PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/tensorboardyt_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch TensorBoard Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/trainingyt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Training with PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/introyt/captumyt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Understanding with Captum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_4" id="__nav_3_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning PyTorch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learning PyTorch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/deep_learning_60min_blitz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Learning with PyTorch: A 60 Minute Blitz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/pytorch_with_examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning PyTorch with Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/nn_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is torch.nn really?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/tensorboard_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualizing Models, Data, and Training with TensorBoard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_5" id="__nav_3_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image and Video
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Image and Video
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/torchvision_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchVision Object Detection Finetuning Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/transfer_learning_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transfer Learning for Computer Vision Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/fgsm_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adversarial Example Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/dcgan_faces_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DCGAN Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/spatial_transformer_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial Transformer Networks Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/vt_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimizing Vision Transformer Model for Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/tiatoolbox_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Whole Slide Image Classification Using PyTorch and TIAToolbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_6" id="__nav_3_1_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Audio
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_io_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_resampling_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio Resampling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_data_augmentation_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio Data Augmentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_feature_extractions_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio Feature Extractions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_feature_augmentation_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio Feature Augmentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/audio_datasets_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audio Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/speech_recognition_pipeline_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Speech Recognition with Wav2Vec2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/text_to_speech_with_torchaudio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text-to-speech with Tacotron2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/forced_alignment_with_torchaudio_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Forced Alignment with Wav2Vec2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_7" id="__nav_3_1_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Text
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/bettertransformer_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fast Transformer Inference with Better Transformer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/char_rnn_classification_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLP From Scratch: Classifying Names with a Character-Level RNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/char_rnn_generation_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLP From Scratch: Generating Names with a Character-Level RNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/seq2seq_translation_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NLP From Scratch: Translation with a Sequence to Sequence Network and Attention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/text_sentiment_ngrams_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text classification with the torchtext library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/translation_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Translation with nn.Transformer and torchtext
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/torchtext_custom_dataset_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preprocess custom text dataset using Torchtext
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_8" id="__nav_3_1_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backends
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Backends
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/onnx/intro_onnx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to ONNX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_9" id="__nav_3_1_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reinforcement Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/reinforcement_q_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement Learning (DQN) Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/reinforcement_ppo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement Learning (PPO) with TorchRL Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/mario_rl_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Train a Mario-playing RL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/pendulum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pendulum: Writing your environment and transforms with TorchRL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_10" id="__nav_3_1_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploying PyTorch Models in Production
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deploying PyTorch Models in Production
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/onnx/intro_onnx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to ONNX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/flask_rest_api_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploying PyTorch in Python via a REST API with Flask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/Intro_to_TorchScript_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to TorchScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/cpp_export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loading a TorchScript Model in C++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/super_resolution_with_onnxruntime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (optional) Exporting a Model from PyTorch to ONNX and Running it using ONNX Runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/realtime_rpi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real Time Inference on Raspberry Pi 4 (30 fps!)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_11" id="__nav_3_1_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profiling PyTorch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Profiling PyTorch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/profiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profiling your PyTorch Module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/hta_intro_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to Holistic Trace Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/hta_trace_diff_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trace Diff using Holistic Trace Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_12" id="__nav_3_1_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Transforms with FX
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Transforms with FX
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/fx_conv_bn_fuser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Building a Convolution/Batch Norm fuser in FX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/fx_profiling_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Building a Simple CPU Performance Profiler with FX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_13" id="__nav_3_1_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend APIs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend APIs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/memory_format_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Channels Last Memory Format in PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/forward_ad_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Forward-mode Automatic Differentiation (Beta)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/jacobians_hessians/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jacobians, Hessians, hvp, vhp, and more: composing function transforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/ensembling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model ensembling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/per_sample_grads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-sample-gradients
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/cpp_frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using the PyTorch C++ Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/torch-script-parallelism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Parallelism in TorchScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/cpp_autograd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autograd in C++ Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_14" id="__nav_3_1_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending PyTorch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extending PyTorch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/custom_function_double_backward_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Double Backward with Custom Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/custom_function_conv_bn_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fusing Convolution and Batch Norm using Custom Function
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/cpp_extension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom C++ and CUDA Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/torch_script_custom_ops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending TorchScript with Custom C++ Operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/torch_script_custom_classes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending TorchScript with Custom C++ Classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/dispatcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registering a Dispatched Operator in C++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/extend_dispatcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending dispatcher for a new backend in C++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/privateuseone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Facilitating New Backend Integration by PrivateUse1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_15" id="__nav_3_1_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Optimization
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model Optimization
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/profiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profiling your PyTorch Module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/tensorboard_profiler_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch Profiler With TensorBoard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/hyperparameter_tuning_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hyperparameter tuning with Ray Tune
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/vt_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimizing Vision Transformer Model for Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/parametrizations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parametrizations Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/pruning_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pruning Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/dynamic_quantization_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Dynamic Quantization on an LSTM Word Language Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/dynamic_quantization_bert_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Dynamic Quantization on BERT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/quantized_transfer_learning_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Quantized Transfer Learning for Computer Vision Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/static_quantization_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (beta) Static Quantization with Eager Mode in PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/torchserve_with_ipex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grokking PyTorch Intel CPU performance from first principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/torchserve_with_ipex_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grokking PyTorch Intel CPU performance from first principles (Part 2)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/nvfuser_intro_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started - Accelerate Your Scripts with nvFuser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/ax_multiobjective_nas_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Objective NAS with Ax
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/torch_compile_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to torch.compile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/inductor_debug_cpu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inductor CPU backend debugging and profiling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/scaled_dot_product_attention_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/scaled_dot_product_attention_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/scaled_dot_product_attention_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/scaled_dot_product_attention_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/knowledge_distillation_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge Distillation Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_16" id="__nav_3_1_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel and Distributed Training
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Parallel and Distributed Training
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/distributed/home/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed and Parallel Training Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/dist_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch Distributed Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/ddp_series_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed Data Parallel in PyTorch - Video Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/model_parallel_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Single-Machine Model Parallel Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/ddp_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started with Distributed Data Parallel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/dist_tuto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Distributed Applications with PyTorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/FSDP_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started with Fully Sharded Data Parallel(FSDP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/FSDP_adavnced_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Model Training with Fully Sharded Data Parallel (FSDP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/TP_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Large Scale Transformer model training with Tensor Parallel (TP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/process_group_cpp_extension_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customize Process Group Backends Using Cpp Extensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/rpc_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started with Distributed RPC Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/rpc_param_server_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementing a Parameter Server Using Distributed RPC Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/dist_pipeline_parallel_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed Pipeline Parallelism Using RPC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/rpc_async_execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementing Batch RPC Processing Using Asynchronous Executions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/rpc_ddp_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combining Distributed DataParallel with Distributed RPC Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/ddp_pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Training Transformer models using Distributed Data Parallel and Pipeline Parallelism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/generic_join/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributed Training with Uneven Inputs Using the Join Context Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_17" id="__nav_3_1_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edge with ExecuTorch
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Edge with ExecuTorch
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/tutorials/export-to-executorch-tutorial.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exporting to ExecuTorch Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/running-a-model-cpp-tutorial.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running an ExecuTorch Model in C++ Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/tutorials/sdk-integration-tutorial.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using the ExecuTorch SDK to Profile a Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/demo-apps-ios.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building an ExecuTorch iOS Demo App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/demo-apps-android.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building an ExecuTorch Android Demo App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/executorch/stable/examples-end-to-end-to-lower-model-to-delegate.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lowering a Model as a Delegate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_18" id="__nav_3_1_18_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recommendation Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recommendation Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/intermediate/torchrec_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to TorchRec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/advanced/sharding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploring TorchRec sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_19" id="__nav_3_1_19_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multimodality
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multimodality
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/beginner/flava_finetuning_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchMultimodal Tutorial: Finetuning FLAVA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中文文档
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中文文档
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/docs/stable/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pytorch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/audio/stable/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torchaudio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/text/stable/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchText
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/vision/stable/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchVision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/torcharrow/beta/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchArrow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/torchrec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchRec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/serve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchServe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/torchx/latest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TorchX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch.org/xla/release/2.3/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch on XLA Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch1x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 1.7 中文文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch1x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 1.4 中文文档 & 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch1x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 1.0 中文文档 & 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch0x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 0.4 中文文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch0x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 0.3 中文文档 & 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pytorch0x.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyTorch 0.2 中文文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../contrib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    贡献指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.apachecn.org/about" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于我们
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.apachecn.org/join" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    加入我们
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://docs.apachecn.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中文资源合集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保留输入名称 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除尺寸 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        统一输入中的名称 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        排列维度 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contracts-away-dims" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contracts away dims ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        工厂函数 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        输出函数和就地变体 ¶
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/apachecn/pytorch-doc-zh/edit/master/docs/2.0/docs/docs/name_inference.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/apachecn/pytorch-doc-zh/raw/master/docs/2.0/docs/docs/name_inference.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="tensor">命名tensor运算符覆盖率 <a href="#named-tensors-operator-coverage" title="此标题的永久链接">¶</a></h1>
+<blockquote>
+<p>译者：<a href="https://github.com/jiangzhonglian">片刻小哥哥</a></p>
+<p>项目地址：<a href="https://pytorch.apachecn.org/2.0/docs/name_inference">https://pytorch.apachecn.org/2.0/docs/name_inference</a></p>
+<p>原始地址：<a href="https://pytorch.org/docs/stable/name_inference.html">https://pytorch.org/docs/stable/name_inference.html</a></p>
+</blockquote>
+<p>请首先阅读<a href="named_tensor.html#named-tensors-doc">命名tensor</a>，了解命名tensor的介绍。</p>
+<p>本文档是 *name inference
+* 的参考，这是一个定义tensor命名的过程：</p>
+<ol>
+<li>使用名称提供额外的自动运行时正确性检查2。将名称从输入tensor传播到输出tensor</li>
+</ol>
+<p>下面是命名tensor支持的所有操作及其关联的名称推理规则的列表。</p>
+<p>如果您没有看到此处列出的操作，但它会对您的用例有所帮助，请<a href="https://github.com/pytorch/pytorch/issues?q=is%3Aopen +is%3Aissue+label%3A%22module%3A+named+tensor%22">搜索是否已提交问题</a> 如果不是，则<a href="https://github.com/pytorch/pytorch/issues/new/choose">文件一</a> 。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>指定的tensor API 是实验性的，可能会发生变化。</p>
+</div>
+<p>支持的操作 <a href="#id1" title="此表的永久链接">¶</a></p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Name inference rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="generated/torch.Tensor.abs.html#torch.Tensor.abs" title="torch.Tensor.abs"><code>Tensor.abs()</code></a>    ,   <a href="generated/torch.abs.html#torch.abs" title="torch.abs"><code>torch.abs()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.abs_.html#torch.Tensor.abs_" title="torch.Tensor.abs_"><code>Tensor.abs_()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.acos.html#torch.Tensor.acos" title="torch.Tensor.acos"><code>Tensor.acos()</code></a>    ,   <a href="generated/torch.acos.html#torch.acos" title="torch.acos"><code>torch.acos()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.acos_.html#torch.Tensor.acos_" title="torch.Tensor.acos_"><code>Tensor.acos_()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.add.html#torch.Tensor.add" title="torch.Tensor.add"><code>Tensor.add()</code></a>    ,   <a href="generated/torch.add.html#torch.add" title="torch.add"><code>torch.add()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.add_.html#torch.Tensor.add_" title="torch.Tensor.add_"><code>Tensor.add_()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.addmm.html#torch.Tensor.addmm" title="torch.Tensor.addmm"><code>Tensor.addmm()</code></a>    ,   <a href="generated/torch.addmm.html#torch.addmm" title="torch.addmm"><code>torch.addmm()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.addmm_.html#torch.Tensor.addmm_" title="torch.Tensor.addmm_"><code>Tensor.addmm_()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.addmv.html#torch.Tensor.addmv" title="torch.Tensor.addmv"><code>Tensor.addmv()</code></a>    ,   <a href="generated/torch.addmv.html#torch.addmv" title="torch.addmv"><code>torch.addmv()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.addmv_.html#torch.Tensor.addmv_" title="torch.Tensor.addmv_"><code>Tensor.addmv_()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.align_as" title="torch.Tensor.align_as"><code>Tensor.align_as()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.align_to" title="torch.Tensor.align_to"><code>Tensor.align_to()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.all.html#torch.Tensor.all" title="torch.Tensor.all"><code>Tensor.all()</code></a>    ,   <a href="generated/torch.all.html#torch.all" title="torch.all"><code>torch.all()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.any.html#torch.Tensor.any" title="torch.Tensor.any"><code>Tensor.any()</code></a>    ,   <a href="generated/torch.any.html#torch.any" title="torch.any"><code>torch.any()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.asin.html#torch.Tensor.asin" title="torch.Tensor.asin"><code>Tensor.asin()</code></a>    ,   <a href="generated/torch.asin.html#torch.asin" title="torch.asin"><code>torch.asin()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.asin_.html#torch.Tensor.asin_" title="torch.Tensor.asin_"><code>Tensor.asin_()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atan.html#torch.Tensor.atan" title="torch.Tensor.atan"><code>Tensor.atan()</code></a>    ,   <a href="generated/torch.atan.html#torch.atan" title="torch.atan"><code>torch.atan()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atan2.html#torch.Tensor.atan2" title="torch.Tensor.atan2"><code>Tensor.atan2()</code></a>    ,   <a href="generated/torch.atan2.html#torch.atan2" title="torch.atan2"><code>torch.atan2()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atan2_.html#torch.Tensor.atan2_" title="torch.Tensor.atan2_"><code>Tensor.atan2_()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atan_.html#torch.Tensor.atan_" title="torch.Tensor.atan_"><code>Tensor.atan_()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bernoulli.html#torch.Tensor.bernoulli" title="torch.Tensor.bernoulli"><code>Tensor.bernoulli()</code></a>    ,   <a href="generated/torch.bernoulli.html#torch.bernoulli" title="torch.bernoulli"><code>torch.bernoulli()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bernoulli_.html#torch.Tensor.bernoulli_" title="torch.Tensor.bernoulli_"><code>Tensor.bernoulli_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bfloat16.html#torch.Tensor.bfloat16" title="torch.Tensor.bfloat16"><code>Tensor.bfloat16()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bitwise_not.html#torch.Tensor.bitwise_not" title="torch.Tensor.bitwise_not"><code>Tensor.bitwise_not()</code></a>    ,   <a href="generated/torch.bitwise_not.html#torch.bitwise_not" title="torch.bitwise_not"><code>torch.bitwise_not()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bitwise_not_.html#torch.Tensor.bitwise_not_" title="torch.Tensor.bitwise_not_"><code>Tensor.bitwise_not_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bmm.html#torch.Tensor.bmm" title="torch.Tensor.bmm"><code>Tensor.bmm()</code></a>    ,   <a href="generated/torch.bmm.html#torch.bmm" title="torch.bmm"><code>torch.bmm()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.bool.html#torch.Tensor.bool" title="torch.Tensor.bool"><code>Tensor.bool()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.byte.html#torch.Tensor.byte" title="torch.Tensor.byte"><code>Tensor.byte()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.cat.html#torch.cat" title="torch.cat"><code>torch.cat()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cauchy_.html#torch.Tensor.cauchy_" title="torch.Tensor.cauchy_"><code>Tensor.cauchy_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ceil.html#torch.Tensor.ceil" title="torch.Tensor.ceil"><code>Tensor.ceil()</code></a>    ,   <a href="generated/torch.ceil.html#torch.ceil" title="torch.ceil"><code>torch.ceil()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ceil_.html#torch.Tensor.ceil_" title="torch.Tensor.ceil_"><code>Tensor.ceil_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.char.html#torch.Tensor.char" title="torch.Tensor.char"><code>Tensor.char()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.chunk.html#torch.Tensor.chunk" title="torch.Tensor.chunk"><code>Tensor.chunk()</code></a>    ,   <a href="generated/torch.chunk.html#torch.chunk" title="torch.chunk"><code>torch.chunk()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.clamp.html#torch.Tensor.clamp" title="torch.Tensor.clamp"><code>Tensor.clamp()</code></a>    ,   <a href="generated/torch.clamp.html#torch.clamp" title="torch.clamp"><code>torch.clamp()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.clamp_.html#torch.Tensor.clamp_" title="torch.Tensor.clamp_"><code>Tensor.clamp_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.copy_.html#torch.Tensor.copy_" title="torch.Tensor.copy_"><code>Tensor.copy_()</code></a></td>
+<td><a href="#out-function-semantics-doc">out function and in-place variants</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cos.html#torch.Tensor.cos" title="torch.Tensor.cos"><code>Tensor.cos()</code></a>    ,   <a href="generated/torch.cos.html#torch.cos" title="torch.cos"><code>torch.cos()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cos_.html#torch.Tensor.cos_" title="torch.Tensor.cos_"><code>Tensor.cos_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cosh.html#torch.Tensor.cosh" title="torch.Tensor.cosh"><code>Tensor.cosh()</code></a>    ,   <a href="generated/torch.cosh.html#torch.cosh" title="torch.cosh"><code>torch.cosh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cosh_.html#torch.Tensor.cosh_" title="torch.Tensor.cosh_"><code>Tensor.cosh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.acosh.html#torch.Tensor.acosh" title="torch.Tensor.acosh"><code>Tensor.acosh()</code></a>    ,   <a href="generated/torch.acosh.html#torch.acosh" title="torch.acosh"><code>torch.acosh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.acosh_.html#torch.Tensor.acosh_" title="torch.Tensor.acosh_"><code>Tensor.acosh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cpu.html#torch.Tensor.cpu" title="torch.Tensor.cpu"><code>Tensor.cpu()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cuda.html#torch.Tensor.cuda" title="torch.Tensor.cuda"><code>Tensor.cuda()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cumprod.html#torch.Tensor.cumprod" title="torch.Tensor.cumprod"><code>Tensor.cumprod()</code></a>    ,   <a href="generated/torch.cumprod.html#torch.cumprod" title="torch.cumprod"><code>torch.cumprod()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.cumsum.html#torch.Tensor.cumsum" title="torch.Tensor.cumsum"><code>Tensor.cumsum()</code></a>    ,   <a href="generated/torch.cumsum.html#torch.cumsum" title="torch.cumsum"><code>torch.cumsum()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.data_ptr.html#torch.Tensor.data_ptr" title="torch.Tensor.data_ptr"><code>Tensor.data_ptr()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.deg2rad.html#torch.Tensor.deg2rad" title="torch.Tensor.deg2rad"><code>Tensor.deg2rad()</code></a>    ,   <a href="generated/torch.deg2rad.html#torch.deg2rad" title="torch.deg2rad"><code>torch.deg2rad()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><code>Tensor.deg2rad_()</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.detach.html#torch.Tensor.detach" title="torch.Tensor.detach"><code>Tensor.detach()</code></a>    ,   <code>torch.detach()</code></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.detach_.html#torch.Tensor.detach_" title="torch.Tensor.detach_"><code>Tensor.detach_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.device.html#torch.Tensor.device" title="torch.Tensor.device"><code>Tensor.device</code></a>  ,   <a href="tensor_attributes.html#torch.device" title="torch.device"><code>torch.device()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.digamma.html#torch.Tensor.digamma" title="torch.Tensor.digamma"><code>Tensor.digamma()</code></a>    ,   <a href="generated/torch.digamma.html#torch.digamma" title="torch.digamma"><code>torch.digamma()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.digamma_.html#torch.Tensor.digamma_" title="torch.Tensor.digamma_"><code>Tensor.digamma_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.dim.html#torch.Tensor.dim" title="torch.Tensor.dim"><code>Tensor.dim()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.div.html#torch.Tensor.div" title="torch.Tensor.div"><code>Tensor.div()</code></a>    ,   <a href="generated/torch.div.html#torch.div" title="torch.div"><code>torch.div()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.div_.html#torch.Tensor.div_" title="torch.Tensor.div_"><code>Tensor.div_()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.dot.html#torch.Tensor.dot" title="torch.Tensor.dot"><code>Tensor.dot()</code></a>    ,   <a href="generated/torch.dot.html#torch.dot" title="torch.dot"><code>torch.dot()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.double.html#torch.Tensor.double" title="torch.Tensor.double"><code>Tensor.double()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.element_size.html#torch.Tensor.element_size" title="torch.Tensor.element_size"><code>Tensor.element_size()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.empty.html#torch.empty" title="torch.empty"><code>torch.empty()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.empty_like.html#torch.empty_like" title="torch.empty_like"><code>torch.empty_like()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.eq.html#torch.Tensor.eq" title="torch.Tensor.eq"><code>Tensor.eq()</code></a>    ,   <a href="generated/torch.eq.html#torch.eq" title="torch.eq"><code>torch.eq()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erf.html#torch.Tensor.erf" title="torch.Tensor.erf"><code>Tensor.erf()</code></a>    ,   <a href="generated/torch.erf.html#torch.erf" title="torch.erf"><code>torch.erf()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erf_.html#torch.Tensor.erf_" title="torch.Tensor.erf_"><code>Tensor.erf_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erfc.html#torch.Tensor.erfc" title="torch.Tensor.erfc"><code>Tensor.erfc()</code></a>    ,   <a href="generated/torch.erfc.html#torch.erfc" title="torch.erfc"><code>torch.erfc()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erfc_.html#torch.Tensor.erfc_" title="torch.Tensor.erfc_"><code>Tensor.erfc_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erfinv.html#torch.Tensor.erfinv" title="torch.Tensor.erfinv"><code>Tensor.erfinv()</code></a>    ,   <a href="generated/torch.erfinv.html#torch.erfinv" title="torch.erfinv"><code>torch.erfinv()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.erfinv_.html#torch.Tensor.erfinv_" title="torch.Tensor.erfinv_"><code>Tensor.erfinv_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.exp.html#torch.Tensor.exp" title="torch.Tensor.exp"><code>Tensor.exp()</code></a>    ,   <a href="generated/torch.exp.html#torch.exp" title="torch.exp"><code>torch.exp()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.exp_.html#torch.Tensor.exp_" title="torch.Tensor.exp_"><code>Tensor.exp_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.expand.html#torch.Tensor.expand" title="torch.Tensor.expand"><code>Tensor.expand()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.expm1.html#torch.Tensor.expm1" title="torch.Tensor.expm1"><code>Tensor.expm1()</code></a>    ,   <a href="generated/torch.expm1.html#torch.expm1" title="torch.expm1"><code>torch.expm1()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.expm1_.html#torch.Tensor.expm1_" title="torch.Tensor.expm1_"><code>Tensor.expm1_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.exponential_.html#torch.Tensor.exponential_" title="torch.Tensor.exponential_"><code>Tensor.exponential_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.fill_.html#torch.Tensor.fill_" title="torch.Tensor.fill_"><code>Tensor.fill_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.flatten.html#torch.Tensor.flatten" title="torch.Tensor.flatten"><code>Tensor.flatten()</code></a>    ,   <a href="generated/torch.flatten.html#torch.flatten" title="torch.flatten"><code>torch.flatten()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.float.html#torch.Tensor.float" title="torch.Tensor.float"><code>Tensor.float()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.floor.html#torch.Tensor.floor" title="torch.Tensor.floor"><code>Tensor.floor()</code></a>    ,   <a href="generated/torch.floor.html#torch.floor" title="torch.floor"><code>torch.floor()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.floor_.html#torch.Tensor.floor_" title="torch.Tensor.floor_"><code>Tensor.floor_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.frac.html#torch.Tensor.frac" title="torch.Tensor.frac"><code>Tensor.frac()</code></a>    ,   <a href="generated/torch.frac.html#torch.frac" title="torch.frac"><code>torch.frac()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.frac_.html#torch.Tensor.frac_" title="torch.Tensor.frac_"><code>Tensor.frac_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ge.html#torch.Tensor.ge" title="torch.Tensor.ge"><code>Tensor.ge()</code></a>    ,   <a href="generated/torch.ge.html#torch.ge" title="torch.ge"><code>torch.ge()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.get_device.html#torch.Tensor.get_device" title="torch.Tensor.get_device"><code>Tensor.get_device()</code></a>    ,   <code>torch.get_device()</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.grad.html#torch.Tensor.grad" title="torch.Tensor.grad"><code>Tensor.grad</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.gt.html#torch.Tensor.gt" title="torch.Tensor.gt"><code>Tensor.gt()</code></a>    ,   <a href="generated/torch.gt.html#torch.gt" title="torch.gt"><code>torch.gt()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.half.html#torch.Tensor.half" title="torch.Tensor.half"><code>Tensor.half()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><code>Tensor.has_names()</code></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.index_fill.html#torch.Tensor.index_fill" title="torch.Tensor.index_fill"><code>Tensor.index_fill()</code></a>    ,   <code>torch.index_fill()</code></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.index_fill_.html#torch.Tensor.index_fill_" title="torch.Tensor.index_fill_"><code>Tensor.index_fill_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.int.html#torch.Tensor.int" title="torch.Tensor.int"><code>Tensor.int()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_contiguous.html#torch.Tensor.is_contiguous" title="torch.Tensor.is_contiguous"><code>Tensor.is_contiguous()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_cuda.html#torch.Tensor.is_cuda" title="torch.Tensor.is_cuda"><code>Tensor.is_cuda</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_floating_point.html#torch.Tensor.is_floating_point" title="torch.Tensor.is_floating_point"><code>Tensor.is_floating_point()</code></a>    ,   <a href="generated/torch.is_floating_point.html#torch.is_floating_point" title="torch.is_floating_point"><code>torch.is_floating_point()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_leaf.html#torch.Tensor.is_leaf" title="torch.Tensor.is_leaf"><code>Tensor.is_leaf</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_pinned.html#torch.Tensor.is_pinned" title="torch.Tensor.is_pinned"><code>Tensor.is_pinned()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_shared.html#torch.Tensor.is_shared" title="torch.Tensor.is_shared"><code>Tensor.is_shared()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_signed.html#torch.Tensor.is_signed" title="torch.Tensor.is_signed"><code>Tensor.is_signed()</code></a>    ,   <code>torch.is_signed()</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_sparse.html#torch.Tensor.is_sparse" title="torch.Tensor.is_sparse"><code>Tensor.is_sparse</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.is_sparse_csr.html#torch.Tensor.is_sparse_csr" title="torch.Tensor.is_sparse_csr"><code>Tensor.is_sparse_csr</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.is_tensor.html#torch.is_tensor" title="torch.is_tensor"><code>torch.is_tensor()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.item.html#torch.Tensor.item" title="torch.Tensor.item"><code>Tensor.item()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.itemsize.html#torch.Tensor.itemsize" title="torch.Tensor.itemsize"><code>Tensor.itemsize</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.kthvalue.html#torch.Tensor.kthvalue" title="torch.Tensor.kthvalue"><code>Tensor.kthvalue()</code></a>    ,   <a href="generated/torch.kthvalue.html#torch.kthvalue" title="torch.kthvalue"><code>torch.kthvalue()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.le.html#torch.Tensor.le" title="torch.Tensor.le"><code>Tensor.le()</code></a>    ,   <a href="generated/torch.le.html#torch.le" title="torch.le"><code>torch.le()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log.html#torch.Tensor.log" title="torch.Tensor.log"><code>Tensor.log()</code></a>    ,   <a href="generated/torch.log.html#torch.log" title="torch.log"><code>torch.log()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log10.html#torch.Tensor.log10" title="torch.Tensor.log10"><code>Tensor.log10()</code></a>    ,   <a href="generated/torch.log10.html#torch.log10" title="torch.log10"><code>torch.log10()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log10_.html#torch.Tensor.log10_" title="torch.Tensor.log10_"><code>Tensor.log10_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log1p.html#torch.Tensor.log1p" title="torch.Tensor.log1p"><code>Tensor.log1p()</code></a>    ,   <a href="generated/torch.log1p.html#torch.log1p" title="torch.log1p"><code>torch.log1p()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log1p_.html#torch.Tensor.log1p_" title="torch.Tensor.log1p_"><code>Tensor.log1p_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log2.html#torch.Tensor.log2" title="torch.Tensor.log2"><code>Tensor.log2()</code></a>    ,   <a href="generated/torch.log2.html#torch.log2" title="torch.log2"><code>torch.log2()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log2_.html#torch.Tensor.log2_" title="torch.Tensor.log2_"><code>Tensor.log2_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log_.html#torch.Tensor.log_" title="torch.Tensor.log_"><code>Tensor.log_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.log_normal_.html#torch.Tensor.log_normal_" title="torch.Tensor.log_normal_"><code>Tensor.log_normal_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.logical_not.html#torch.Tensor.logical_not" title="torch.Tensor.logical_not"><code>Tensor.logical_not()</code></a>    ,   <a href="generated/torch.logical_not.html#torch.logical_not" title="torch.logical_not"><code>torch.logical_not()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.logical_not_.html#torch.Tensor.logical_not_" title="torch.Tensor.logical_not_"><code>Tensor.logical_not_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.logsumexp.html#torch.Tensor.logsumexp" title="torch.Tensor.logsumexp"><code>Tensor.logsumexp()</code></a>    ,   <a href="generated/torch.logsumexp.html#torch.logsumexp" title="torch.logsumexp"><code>torch.logsumexp()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.long.html#torch.Tensor.long" title="torch.Tensor.long"><code>Tensor.long()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.lt.html#torch.Tensor.lt" title="torch.Tensor.lt"><code>Tensor.lt()</code></a>    ,   <a href="generated/torch.lt.html#torch.lt" title="torch.lt"><code>torch.lt()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.manual_seed.html#torch.manual_seed" title="torch.manual_seed"><code>torch.manual_seed()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.masked_fill.html#torch.Tensor.masked_fill" title="torch.Tensor.masked_fill"><code>Tensor.masked_fill()</code></a>    ,   <code>torch.masked_fill()</code></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.masked_fill_.html#torch.Tensor.masked_fill_" title="torch.Tensor.masked_fill_"><code>Tensor.masked_fill_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.masked_select.html#torch.Tensor.masked_select" title="torch.Tensor.masked_select"><code>Tensor.masked_select()</code></a>    ,   <a href="generated/torch.masked_select.html#torch.masked_select" title="torch.masked_select"><code>torch.masked_select()</code></a></td>
+<td>Aligns mask up to input and then unifies_names_from_input_tensors</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.matmul.html#torch.Tensor.matmul" title="torch.Tensor.matmul"><code>Tensor.matmul()</code></a>    ,   <a href="generated/torch.matmul.html#torch.matmul" title="torch.matmul"><code>torch.matmul()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mean.html#torch.Tensor.mean" title="torch.Tensor.mean"><code>Tensor.mean()</code></a>    ,   <a href="generated/torch.mean.html#torch.mean" title="torch.mean"><code>torch.mean()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.median.html#torch.Tensor.median" title="torch.Tensor.median"><code>Tensor.median()</code></a>    ,   <a href="generated/torch.median.html#torch.median" title="torch.median"><code>torch.median()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.nanmedian.html#torch.Tensor.nanmedian" title="torch.Tensor.nanmedian"><code>Tensor.nanmedian()</code></a>    ,   <a href="generated/torch.nanmedian.html#torch.nanmedian" title="torch.nanmedian"><code>torch.nanmedian()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mm.html#torch.Tensor.mm" title="torch.Tensor.mm"><code>Tensor.mm()</code></a>    ,   <a href="generated/torch.mm.html#torch.mm" title="torch.mm"><code>torch.mm()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mode.html#torch.Tensor.mode" title="torch.Tensor.mode"><code>Tensor.mode()</code></a>    ,   <a href="generated/torch.mode.html#torch.mode" title="torch.mode"><code>torch.mode()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mul.html#torch.Tensor.mul" title="torch.Tensor.mul"><code>Tensor.mul()</code></a>    ,   <a href="generated/torch.mul.html#torch.mul" title="torch.mul"><code>torch.mul()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mul_.html#torch.Tensor.mul_" title="torch.Tensor.mul_"><code>Tensor.mul_()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.mv.html#torch.Tensor.mv" title="torch.Tensor.mv"><code>Tensor.mv()</code></a>    ,   <a href="generated/torch.mv.html#torch.mv" title="torch.mv"><code>torch.mv()</code></a></td>
+<td><a href="#contracts-away-dims-doc">Contracts away dims</a></td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.names" title="torch.Tensor.names"><code>Tensor.names</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.narrow.html#torch.Tensor.narrow" title="torch.Tensor.narrow"><code>Tensor.narrow()</code></a>    ,   <a href="generated/torch.narrow.html#torch.narrow" title="torch.narrow"><code>torch.narrow()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.nbytes.html#torch.Tensor.nbytes" title="torch.Tensor.nbytes"><code>Tensor.nbytes</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ndim.html#torch.Tensor.ndim" title="torch.Tensor.ndim"><code>Tensor.ndim</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ndimension.html#torch.Tensor.ndimension" title="torch.Tensor.ndimension"><code>Tensor.ndimension()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.ne.html#torch.Tensor.ne" title="torch.Tensor.ne"><code>Tensor.ne()</code></a>    ,   <a href="generated/torch.ne.html#torch.ne" title="torch.ne"><code>torch.ne()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.neg.html#torch.Tensor.neg" title="torch.Tensor.neg"><code>Tensor.neg()</code></a>    ,   <a href="generated/torch.neg.html#torch.neg" title="torch.neg"><code>torch.neg()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.neg_.html#torch.Tensor.neg_" title="torch.Tensor.neg_"><code>Tensor.neg_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.normal.html#torch.normal" title="torch.normal"><code>torch.normal()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.normal_.html#torch.Tensor.normal_" title="torch.Tensor.normal_"><code>Tensor.normal_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.numel.html#torch.Tensor.numel" title="torch.Tensor.numel"><code>Tensor.numel()</code></a>    ,   <a href="generated/torch.numel.html#torch.numel" title="torch.numel"><code>torch.numel()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.ones.html#torch.ones" title="torch.ones"><code>torch.ones()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.pow.html#torch.Tensor.pow" title="torch.Tensor.pow"><code>Tensor.pow()</code></a>    ,   <a href="generated/torch.pow.html#torch.pow" title="torch.pow"><code>torch.pow()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.pow_.html#torch.Tensor.pow_" title="torch.Tensor.pow_"><code>Tensor.pow_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.prod.html#torch.Tensor.prod" title="torch.Tensor.prod"><code>Tensor.prod()</code></a>    ,   <a href="generated/torch.prod.html#torch.prod" title="torch.prod"><code>torch.prod()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.rad2deg.html#torch.Tensor.rad2deg" title="torch.Tensor.rad2deg"><code>Tensor.rad2deg()</code></a>    ,   <a href="generated/torch.rad2deg.html#torch.rad2deg" title="torch.rad2deg"><code>torch.rad2deg()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><code>Tensor.rad2deg_()</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.rand.html#torch.rand" title="torch.rand"><code>torch.rand()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.rand.html#torch.rand" title="torch.rand"><code>torch.rand()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.randn.html#torch.randn" title="torch.randn"><code>torch.randn()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.randn.html#torch.randn" title="torch.randn"><code>torch.randn()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.random_.html#torch.Tensor.random_" title="torch.Tensor.random_"><code>Tensor.random_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.reciprocal.html#torch.Tensor.reciprocal" title="torch.Tensor.reciprocal"><code>Tensor.reciprocal()</code></a>    ,   <a href="generated/torch.reciprocal.html#torch.reciprocal" title="torch.reciprocal"><code>torch.reciprocal()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.reciprocal_.html#torch.Tensor.reciprocal_" title="torch.Tensor.reciprocal_"><code>Tensor.reciprocal_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.refine_names" title="torch.Tensor.refine_names"><code>Tensor.refine_names()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.register_hook.html#torch.Tensor.register_hook" title="torch.Tensor.register_hook"><code>Tensor.register_hook()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.register_post_accumulate_grad_hook.html#torch.Tensor.register_post_accumulate_grad_hook" title="torch.Tensor.register_post_accumulate_grad_hook"><code>Tensor.register_post_accumulate_grad_hook()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.rename" title="torch.Tensor.rename"><code>Tensor.rename()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="named_tensor.html#torch.Tensor.rename_" title="torch.Tensor.rename_"><code>Tensor.rename_()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.requires_grad.html#torch.Tensor.requires_grad" title="torch.Tensor.requires_grad"><code>Tensor.requires_grad</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.requires_grad_.html#torch.Tensor.requires_grad_" title="torch.Tensor.requires_grad_"><code>Tensor.requires_grad_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.resize_.html#torch.Tensor.resize_" title="torch.Tensor.resize_"><code>Tensor.resize_()</code></a></td>
+<td>Only allow resizes that do not change shape</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.resize_as_.html#torch.Tensor.resize_as_" title="torch.Tensor.resize_as_"><code>Tensor.resize_as_()</code></a></td>
+<td>Only allow resizes that do not change shape</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.round.html#torch.Tensor.round" title="torch.Tensor.round"><code>Tensor.round()</code></a>    ,   <a href="generated/torch.round.html#torch.round" title="torch.round"><code>torch.round()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.round_.html#torch.Tensor.round_" title="torch.Tensor.round_"><code>Tensor.round_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.rsqrt.html#torch.Tensor.rsqrt" title="torch.Tensor.rsqrt"><code>Tensor.rsqrt()</code></a>    ,   <a href="generated/torch.rsqrt.html#torch.rsqrt" title="torch.rsqrt"><code>torch.rsqrt()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.rsqrt_.html#torch.Tensor.rsqrt_" title="torch.Tensor.rsqrt_"><code>Tensor.rsqrt_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.select.html#torch.Tensor.select" title="torch.Tensor.select"><code>Tensor.select()</code></a>    ,   <a href="generated/torch.select.html#torch.select" title="torch.select"><code>torch.select()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.short.html#torch.Tensor.short" title="torch.Tensor.short"><code>Tensor.short()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sigmoid.html#torch.Tensor.sigmoid" title="torch.Tensor.sigmoid"><code>Tensor.sigmoid()</code></a>    ,   <a href="generated/torch.sigmoid.html#torch.sigmoid" title="torch.sigmoid"><code>torch.sigmoid()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sigmoid_.html#torch.Tensor.sigmoid_" title="torch.Tensor.sigmoid_"><code>Tensor.sigmoid_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sign.html#torch.Tensor.sign" title="torch.Tensor.sign"><code>Tensor.sign()</code></a>    ,   <a href="generated/torch.sign.html#torch.sign" title="torch.sign"><code>torch.sign()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sign_.html#torch.Tensor.sign_" title="torch.Tensor.sign_"><code>Tensor.sign_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sgn.html#torch.Tensor.sgn" title="torch.Tensor.sgn"><code>Tensor.sgn()</code></a>    ,   <a href="generated/torch.sgn.html#torch.sgn" title="torch.sgn"><code>torch.sgn()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sgn_.html#torch.Tensor.sgn_" title="torch.Tensor.sgn_"><code>Tensor.sgn_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sin.html#torch.Tensor.sin" title="torch.Tensor.sin"><code>Tensor.sin()</code></a>    ,   <a href="generated/torch.sin.html#torch.sin" title="torch.sin"><code>torch.sin()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sin_.html#torch.Tensor.sin_" title="torch.Tensor.sin_"><code>Tensor.sin_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sinh.html#torch.Tensor.sinh" title="torch.Tensor.sinh"><code>Tensor.sinh()</code></a>    ,   <a href="generated/torch.sinh.html#torch.sinh" title="torch.sinh"><code>torch.sinh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sinh_.html#torch.Tensor.sinh_" title="torch.Tensor.sinh_"><code>Tensor.sinh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.asinh.html#torch.Tensor.asinh" title="torch.Tensor.asinh"><code>Tensor.asinh()</code></a>    ,   <a href="generated/torch.asinh.html#torch.asinh" title="torch.asinh"><code>torch.asinh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.asinh_.html#torch.Tensor.asinh_" title="torch.Tensor.asinh_"><code>Tensor.asinh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.size.html#torch.Tensor.size" title="torch.Tensor.size"><code>Tensor.size()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.softmax.html#torch.Tensor.softmax" title="torch.Tensor.softmax"><code>Tensor.softmax()</code></a>    ,   <a href="generated/torch.softmax.html#torch.softmax" title="torch.softmax"><code>torch.softmax()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.split.html#torch.Tensor.split" title="torch.Tensor.split"><code>Tensor.split()</code></a>    ,   <a href="generated/torch.split.html#torch.split" title="torch.split"><code>torch.split()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sqrt.html#torch.Tensor.sqrt" title="torch.Tensor.sqrt"><code>Tensor.sqrt()</code></a>    ,   <a href="generated/torch.sqrt.html#torch.sqrt" title="torch.sqrt"><code>torch.sqrt()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sqrt_.html#torch.Tensor.sqrt_" title="torch.Tensor.sqrt_"><code>Tensor.sqrt_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.squeeze.html#torch.Tensor.squeeze" title="torch.Tensor.squeeze"><code>Tensor.squeeze()</code></a>    ,   <a href="generated/torch.squeeze.html#torch.squeeze" title="torch.squeeze"><code>torch.squeeze()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.std.html#torch.Tensor.std" title="torch.Tensor.std"><code>Tensor.std()</code></a>    ,   <a href="generated/torch.std.html#torch.std" title="torch.std"><code>torch.std()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.std_mean.html#torch.std_mean" title="torch.std_mean"><code>torch.std_mean()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.stride.html#torch.Tensor.stride" title="torch.Tensor.stride"><code>Tensor.stride()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sub.html#torch.Tensor.sub" title="torch.Tensor.sub"><code>Tensor.sub()</code></a>    ,   <a href="generated/torch.sub.html#torch.sub" title="torch.sub"><code>torch.sub()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sub_.html#torch.Tensor.sub_" title="torch.Tensor.sub_"><code>Tensor.sub_()</code></a></td>
+<td><a href="#unifies-names-from-inputs-doc">Unifies names from inputs</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.sum.html#torch.Tensor.sum" title="torch.Tensor.sum"><code>Tensor.sum()</code></a>    ,   <a href="generated/torch.sum.html#torch.sum" title="torch.sum"><code>torch.sum()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.tan.html#torch.Tensor.tan" title="torch.Tensor.tan"><code>Tensor.tan()</code></a>    ,   <a href="generated/torch.tan.html#torch.tan" title="torch.tan"><code>torch.tan()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.tan_.html#torch.Tensor.tan_" title="torch.Tensor.tan_"><code>Tensor.tan_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.tanh.html#torch.Tensor.tanh" title="torch.Tensor.tanh"><code>Tensor.tanh()</code></a>    ,   <a href="generated/torch.tanh.html#torch.tanh" title="torch.tanh"><code>torch.tanh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.tanh_.html#torch.Tensor.tanh_" title="torch.Tensor.tanh_"><code>Tensor.tanh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atanh.html#torch.Tensor.atanh" title="torch.Tensor.atanh"><code>Tensor.atanh()</code></a>    ,   <a href="generated/torch.atanh.html#torch.atanh" title="torch.atanh"><code>torch.atanh()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.atanh_.html#torch.Tensor.atanh_" title="torch.Tensor.atanh_"><code>Tensor.atanh_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.tensor.html#torch.tensor" title="torch.tensor"><code>torch.tensor()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.to.html#torch.Tensor.to" title="torch.Tensor.to"><code>Tensor.to()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.topk.html#torch.Tensor.topk" title="torch.Tensor.topk"><code>Tensor.topk()</code></a>    ,   <a href="generated/torch.topk.html#torch.topk" title="torch.topk"><code>torch.topk()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.transpose.html#torch.Tensor.transpose" title="torch.Tensor.transpose"><code>Tensor.transpose()</code></a>    ,   <a href="generated/torch.transpose.html#torch.transpose" title="torch.transpose"><code>torch.transpose()</code></a></td>
+<td><a href="#permutes-dimensions-doc">Permutes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.trunc.html#torch.Tensor.trunc" title="torch.Tensor.trunc"><code>Tensor.trunc()</code></a>    ,   <a href="generated/torch.trunc.html#torch.trunc" title="torch.trunc"><code>torch.trunc()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.trunc_.html#torch.Tensor.trunc_" title="torch.Tensor.trunc_"><code>Tensor.trunc_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.type.html#torch.Tensor.type" title="torch.Tensor.type"><code>Tensor.type()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.type_as.html#torch.Tensor.type_as" title="torch.Tensor.type_as"><code>Tensor.type_as()</code></a></td>
+<td><a href="#keeps-input-names-doc">Keeps input names</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.unbind.html#torch.Tensor.unbind" title="torch.Tensor.unbind"><code>Tensor.unbind()</code></a>    ,   <a href="generated/torch.unbind.html#torch.unbind" title="torch.unbind"><code>torch.unbind()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.unflatten.html#torch.Tensor.unflatten" title="torch.Tensor.unflatten"><code>Tensor.unflatten()</code></a></td>
+<td>See documentation</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.uniform_.html#torch.Tensor.uniform_" title="torch.Tensor.uniform_"><code>Tensor.uniform_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.var.html#torch.Tensor.var" title="torch.Tensor.var"><code>Tensor.var()</code></a>    ,   <a href="generated/torch.var.html#torch.var" title="torch.var"><code>torch.var()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.var_mean.html#torch.var_mean" title="torch.var_mean"><code>torch.var_mean()</code></a></td>
+<td><a href="#removes-dimensions-doc">Removes dimensions</a></td>
+</tr>
+<tr>
+<td><a href="generated/torch.Tensor.zero_.html#torch.Tensor.zero_" title="torch.Tensor.zero_"><code>Tensor.zero_()</code></a></td>
+<td>None</td>
+</tr>
+<tr>
+<td><a href="generated/torch.zeros.html#torch.zeros" title="torch.zeros"><code>torch.zeros()</code></a></td>
+<td><a href="#factory-doc">Factory functions</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">保留输入名称 <a href="#keeps-input-names" title="永久链接到此标题">¶</a></h2>
+<p>所有逐点一元函数以及其他一些一元函数都遵循此规则。</p>
+<ul>
+<li>检查名称：无</li>
+<li>传播名称：输入tensor的名称传播到输出。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&gt;&gt;&gt; x = torch.randn(3, 3, names=(&#39;N&#39;, &#39;C&#39;))
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&gt;&gt;&gt; x.abs().names
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>(&#39;N&#39;, &#39;C&#39;)
+</code></pre></div>
+<h2 id="_2">删除尺寸 <a href="#removes-dimensions" title="此标题的永久链接">¶</a></h2>
+<p>所有归约操作如 <a href="generated/torch.Tensor.sum.html#torch.Tensor.sum" title="torch.Tensor.sum"><code>sum()</code></a> 通过减少所需的维度来删除维度。其他操作如 <a href="generated/torch.Tensor.select.html#torch.Tensor.select" title="torch.Tensor.select"><code>select()</code></a> 和 <a href="generated/torch.Tensor.squeeze.html#torch.Tensor.squeeze" title="torch.Tensor.squeeze"><code>squeeze()</code></a> 删除尺寸。</p>
+<p>只要可以将整数维度索引传递给运算符，就可以传递维度名称。采用维度索引列表的函数也可以采用维度名称列表。</p>
+<ul>
+<li>检查名称：如果“dim”或“dims”作为名称列表传入，请检查这些名称是否存在于“self”中。</li>
+<li>传播名称：如果输入tensor的维度由“dim”或“dims”指定<code>不存在于输出tensor中，那么这些维度的相应名称不会出现在</code>output.names` 中。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&gt;&gt;&gt; x = torch.randn(1, 3, 3, 3, names=(&#39;N&#39;, &#39;C&#39;, &#39;H&#39;, &#39;W&#39;))
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>&gt;&gt;&gt; x.squeeze(&#39;N&#39;).names
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>(&#39;C&#39;, &#39;H&#39;, &#39;W&#39;)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>&gt;&gt;&gt; x = torch.randn(3, 3, 3, 3, names=(&#39;N&#39;, &#39;C&#39;, &#39;H&#39;, &#39;W&#39;))
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>&gt;&gt;&gt; x.sum([&#39;N&#39;, &#39;C&#39;]).names
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>(&#39;H&#39;, &#39;W&#39;)
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a># Reduction ops with keepdim=True don&#39;t actually remove dimensions.
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>&gt;&gt;&gt; x = torch.randn(3, 3, 3, 3, names=(&#39;N&#39;, &#39;C&#39;, &#39;H&#39;, &#39;W&#39;))
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>&gt;&gt;&gt; x.sum([&#39;N&#39;, &#39;C&#39;], keepdim=True).names
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>(&#39;N&#39;, &#39;C&#39;, &#39;H&#39;, &#39;W&#39;)
+</code></pre></div>
+<h2 id="_3">统一输入中的名称 <a href="#unizes-names-from-inputs" title="固定链接到此标题">¶</a></h2>
+<p>所有二进制算术运算都遵循此规则。广播的操作仍然从右侧按位置广播，以保持与未命名tensor的兼容性。要按名称执行显式广播，请使用 <a href="named_tensor.html#torch.Tensor.align_as" title="torch.Tensor.align_as"><code>Tensor.align_as()</code></a> 。</p>
+<ul>
+<li>检查名称：所有名称必须从右侧开始位置匹配。即，在 `tensor </li>
+<li>other<code>中，</code>match(tensor.names[i], other.names[i])<code>对于</code>(-min(tensor.dim(), other.dim) 中的所有 <code>i</code> 必须为 true ()) </li>
+<li>1, -1]`.</li>
+<li>检查名称：此外，所有命名维度必须从右对齐。在匹配过程中，如果我们将命名维度 <code>A</code> 与未命名维度 <code>None</code> 匹配，则为 <code>A</code> 不得出现在具有未命名维度的tensor中。</li>
+<li>传播名称：统一两个tensor右侧的名称对以生成输出名称。</li>
+</ul>
+<p>例如，</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a># tensor: Tensor[ N, None]
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a># other: Tensor[None, C]
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>&gt;&gt;&gt; tensor = torch.randn(3, 3, names=(&#39;N&#39;, None))
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>&gt;&gt;&gt; other = torch.randn(3, 3, names=(None, &#39;C&#39;))
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>&gt;&gt;&gt; (tensor + other).names
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>(&#39;N&#39;, &#39;C&#39;)
+</code></pre></div>
+<p>检查姓名：</p>
+<ul>
+<li><code>match(tensor.names[-1], other.names[-1])</code> 为 <code>True</code></li>
+<li><code>match(tensor.names[-2], tensor.names[-2])</code> 为 <code>True</code> </li>
+<li>因为我们将 <a href="generated/torch.tensor.html#torch.tensor" title="torch.tensor"><code>tensor</code></a> 中的 <code>None</code> 与 <code>'C'</code> 匹配，请检查以确保 <code>'C'</code> 不匹配存在于 <a href="generated/torch.tensor.html#torch.tensor" title="torch.tensor"><code>tensor</code></a> 中(不存在)。</li>
+<li>检查以确保 <code>'N'</code> 不存在于 <code>other</code> 中 (它不是)。</li>
+</ul>
+<p>最后，输出名称通过 <code>[unify('N', None), unify(None, 'C')] = ['N', 'C']</code> 计算</p>
+<p>更多示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a># Dimensions don&#39;t match from the right:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a># tensor: Tensor[N, C]
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a># other: Tensor[ N]
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>&gt;&gt;&gt; tensor = torch.randn(3, 3, names=(&#39;N&#39;, &#39;C&#39;))
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>&gt;&gt;&gt; other = torch.randn(3, names=(&#39;N&#39;,))
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>&gt;&gt;&gt; (tensor + other).names
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>RuntimeError: Error when attempting to broadcast dims [&#39;N&#39;, &#39;C&#39;] and dims
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>[&#39;N&#39;]: dim &#39;C&#39; and dim &#39;N&#39; are at the same position from the right but do
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>not match.
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a># Dimensions aren&#39;t aligned when matching tensor.names[-1] and other.names[-1]:
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a># tensor: Tensor[N, None]
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a># other: Tensor[ N]
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>&gt;&gt;&gt; tensor = torch.randn(3, 3, names=(&#39;N&#39;, None))
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>&gt;&gt;&gt; other = torch.randn(3, names=(&#39;N&#39;,))
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>&gt;&gt;&gt; (tensor + other).names
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>RuntimeError: Misaligned dims when attempting to broadcast dims [&#39;N&#39;] and
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>dims [&#39;N&#39;, None]: dim &#39;N&#39; appears in a different position from the right
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>across both lists.
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">笔记</p>
+<p>在最后两个示例中，可以按名称对齐tensor，然后执行加法。使用 <a href="named_tensor.html#torch.Tensor.align_as" title="torch.Tensor.align_as"><code>Tensor.align_as()</code></a> 按名称对齐tensor或 <a href="named_tensor.html #torch.Tensor.align_to" title="torch.Tensor.align_to"><code>Tensor.align_to()</code></a> 将tensor对齐到自定义维度顺序。</p>
+</div>
+<h2 id="_4">排列维度 <a href="#permutes-dimensions" title="永久链接到此标题">¶</a></h2>
+<p>某些操作，例如 <a href="generated/torch.Tensor.t.html#torch.Tensor.t" title="torch.Tensor.t"><code>Tensor.t()</code></a> ，会排列维度的顺序。维度名称附加到各个维度，因此它们也会被排列。</p>
+<p>如果运算符采用位置索引 <code>dim</code> ，它也可以采用维度名称作为 <code>dim</code> 。</p>
+<ul>
+<li>检查名称：如果“dim”作为名称传递，请检查它是否存在于tensor中。 </li>
+<li>传播名称：以与正在排列的维度相同的方式排列维度名称。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>&gt;&gt;&gt; x = torch.randn(3, 3, names=(&#39;N&#39;, &#39;C&#39;))
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>&gt;&gt;&gt; x.transpose(&#39;N&#39;, &#39;C&#39;).names
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>(&#39;C&#39;, &#39;N&#39;)
+</code></pre></div>
+<h2 id="contracts-away-dims">Contracts away dims <a href="#contracts-away-dims" title="此标题的固定链接">¶</a></h2>
+<p>矩阵乘法函数遵循此函数的一些变体。我们先看一下 <a href="generated/torch.mm.html#torch.mm" title="torch.mm"><code>torch.mm()</code></a>，然后概括批量矩阵乘法的规则。</p>
+<p>对于 <code>torch.mm(tensor，其他)</code> ：</p>
+<ul>
+<li>检查名称：无</li>
+<li>传播名称：结果名称为 <code>(tensor.names[-2], other.names[-1])</code> 。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>&gt;&gt;&gt; x = torch.randn(3, 3, names=(&#39;N&#39;, &#39;D&#39;))
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>&gt;&gt;&gt; y = torch.randn(3, 3, names=(&#39;in&#39;, &#39;out&#39;))
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>&gt;&gt;&gt; x.mm(y).names
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>(&#39;N&#39;, &#39;out&#39;)
+</code></pre></div>
+<p>本质上，矩阵乘法在二维上执行点积，从而折叠它们。当两个tensor进行矩阵相乘时，收缩的维度会消失并且不会出现在输出tensor中。</p>
+<p><a href="generated/torch.mv.html#torch.mv" title="torch.mv"><code>torch.mv()</code></a> , <a href="generated/torch.dot.html#torch.dot" title="torch.dot"><code>torch.dot()</code></a> 以类似的方式工作：名称推断不会检查输入名称并删除点积中涉及的维度：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>&gt;&gt;&gt; x = torch.randn(3, 3, names=(&#39;N&#39;, &#39;D&#39;))
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>&gt;&gt;&gt; y = torch.randn(3, names=(&#39;something&#39;,))
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>&gt;&gt;&gt; x.mv(y).names
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>(&#39;N&#39;,)
+</code></pre></div>
+<p>现在，让我们看一下“torch.matmul(tensor, other)”。假设 <code>tensor.dim() &gt;= 2</code> 和 <code>other.dim() &gt;= 2</code> 。</p>
+<ul>
+<li>检查名称：检查输入的批量维度是否对齐且可广播。请参阅<a href="#unizes-names-from-inputs-doc">统一输入中的名称</a>，了解对齐输入的含义。</li>
+<li>传播名称：结果名称是通过统一批量维度并删除收缩维度获得的： `unify(tensor.names[:-2], other.names[:-2]) </li>
+<li>(tensor.names[-2], other.names[ -1])` 。</li>
+</ul>
+<p>例子：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># Batch matrix multiply of matrices Tensor[&#39;C&#39;, &#39;D&#39;] and Tensor[&#39;E&#39;, &#39;F&#39;].
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a># &#39;A&#39;, &#39;B&#39; are batch dimensions.
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>&gt;&gt;&gt; x = torch.randn(3, 3, 3, 3, names=(&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;))
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>&gt;&gt;&gt; y = torch.randn(3, 3, 3, names=(&#39;B&#39;, &#39;E&#39;, &#39;F&#39;))
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>&gt;&gt;&gt; torch.matmul(x, y).names
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>(&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;F&#39;)
+</code></pre></div>
+<p>最后，还有许多 matmul 函数的融合“add”版本。即， <a href="generated/torch.addmm.html#torch.addmm" title="torch.addmm"><code>addmm()</code></a> 和 <a href="generated/torch.addmv.html#torch.addmv" title="torch.添加MV”)。这些被视为构成名称推断，即 [mm()](generated/torch.mm.html#torch.mm &quot;torch.mm"><code>addmv()</code></a> 和 <a href="generated/torch.add.html#torch.add" title="torch.add"><code>add()</code></a>.</p>
+<h2 id="_5">工厂函数 <a href="#factory-functions" title="固定链接到此标题">¶</a></h2>
+<p>工厂函数现在采用一个新的“names”参数，该参数将名称与每个维度相关联。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>&gt;&gt;&gt; torch.zeros(2, 3, names=(&#39;N&#39;, &#39;C&#39;))
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>tensor([[0., 0., 0.],
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a> [0., 0., 0.]], names=(&#39;N&#39;, &#39;C&#39;))
+</code></pre></div>
+<h2 id="_6">输出函数和就地变体 <a href="#out-function-and-in-place-variants" title="永久链接到此标题">¶</a></h2>
+<p>指定为“out=”tensor的tensor具有以下行为：</p>
+<ul>
+<li>如果它没有命名维度，则从操作计算的名称将传播到它。 </li>
+<li>如果它有任何命名维度，则从操作计算的名称必须与现有名称完全相同。否则，操作出错。</li>
+</ul>
+<p>所有就地方法都会修改输入，使其名称等于通过名称推断计算出的名称。例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>&gt;&gt;&gt; x = torch.randn(3, 3)
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>&gt;&gt;&gt; y = torch.randn(3, 3, names=(&#39;N&#39;, &#39;C&#39;))
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>&gt;&gt;&gt; x.names
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>(None, None)
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>&gt;&gt;&gt; x += y
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>&gt;&gt;&gt; x.names
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>(&#39;N&#39;, &#39;C&#39;)
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["content.code.copy", "content.action.edit", "content.action.view", "navigation.footer"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
